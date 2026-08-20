@@ -1,0 +1,5 @@
+# gstack browse-server runtime state (contains local tokens/PIDs — never commit)
+.gstack/
+
+# macOS
+.DS_Store
