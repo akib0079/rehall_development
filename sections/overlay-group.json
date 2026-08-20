@@ -1,0 +1,53 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "aside",
+  "name": "Overlay Group",
+  "sections": {
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {
+        "enable_cart_notes": false,
+        "show_tax_and_shipping": false,
+        "cart_terms_page": "",
+        "enable_direct_cart": true,
+        "show_additional_checkout_buttons": false,
+        "show_backorder_text": false,
+        "enable_cross_sells": false,
+        "cross_sell_title": "You may like",
+        "cross_sell_products": [],
+        "enable_automatic_cross_sells": false
+      }
+    },
+    "search": {
+      "type": "search-popup",
+      "settings": {}
+    },
+    "popup": {
+      "type": "popup",
+      "disabled": true,
+      "settings": {
+        "mode": "enabled",
+        "popup_delay_seconds": 6,
+        "popup_dismiss_for_days": 2,
+        "position": "center",
+        "title": "Sign up and save",
+        "text": "<p>Entice customers to sign up for your mailing list with discounts or exclusive offers.</p>",
+        "show_newsletter": true,
+        "show_social_icons": true
+      }
+    }
+  },
+  "order": [
+    "cart-drawer",
+    "search",
+    "popup"
+  ]
+}
