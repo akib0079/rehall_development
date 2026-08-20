@@ -22,6 +22,21 @@
     top: var(--magic-margin);
   }
   {%- endif -%}
+
+  /* --- Search: clear icon + mobile back arrow --------------------------------
+     The X in the search field clears the query instead of closing the panel,
+     so it only earns its place when there is something to clear. Higher
+     specificity than `.search-active .header__search-form-close` in styles.css,
+     which keeps that rule intact rather than forking it. */
+  body.search-active:not(.search-has-text) .header__search-form-close{
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .header-alt__toggle-ic--back svg{
+    width: 24px;
+    height: 24px;
+  }
 {% endstyle %}
 
 <div data-section-type="header-alt" data-cc-animate>
@@ -135,8 +150,9 @@
             {% endif %}
           {% endfor %}
           <div class="header-alt__toggle-ic-mobile mobile-only">
-            {%- render 'svg-menu' -%}
-            {%- render 'svg-cross' -%}
+            <span class="header-alt__toggle-ic header-alt__toggle-ic--menu">{%- render 'svg-menu' -%}</span>
+            <span class="header-alt__toggle-ic header-alt__toggle-ic--close">{%- render 'svg-cross' -%}</span>
+            <span class="header-alt__toggle-ic header-alt__toggle-ic--back">{%- render 'svg-chevron-left' -%}</span>
           </div>
         </div>
         {% if section.settings.left_menu != blank %}
@@ -156,7 +172,7 @@
         
         <div class="header__search-form-wrap">
           <form class="header__search-form" action="{{ routes.search_url }}" method="get">
-            <a class="header__search-form-close" href="#"> {% render 'svg-cross' %}</a>
+            <a class="header__search-form-close" href="#" role="button" aria-label="Clear search"> {% render 'svg-cross' %}</a>
             <input type="text" class="header__search-field" placeholder="{{ 'general.header.search_placeholder' | t }}" name="q" value="{{ search.terms | escape }}" autocomplete="off">
             <button type="submit" class="header__search-button">{% render 'svg-search-alt' %}</button>
           </form>
@@ -630,8 +646,18 @@
 
         document.querySelectorAll('.header-alt__toggle-ic-mobile').forEach(btn => {
           btn.addEventListener('click', () => {
+            // While search is open this control is rendered as a back arrow,
+            // so it dismisses search rather than opening the menu.
+            if(document.body.classList.contains('search-active')){
+              document.body.classList.remove('search-active');
+              const field = document.querySelector('.header__search-field');
+              if(field) field.blur();
+              return;
+            }
             document.body.classList.toggle('megamenu-active');
             if(document.body.classList.contains('megamenu-active')){
+              // Never let both panels claim the toggle icon at once.
+              document.body.classList.remove('search-active');
               document.addEventListener('click', closeMegamenu)
             }
           })

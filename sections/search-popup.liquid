@@ -14,18 +14,37 @@ class SearchPopup extends HTMLElement {
         this.updateSearchContent();
         this.#form = document.querySelector('.header__search-form')
         document.querySelectorAll('.header__search-form').forEach(ele => {
+            const field = ele.querySelector('.header__search-field');
             ['click', 'focus'].forEach(eventType => {
-            ele.querySelector('.header__search-field').addEventListener(eventType, e => {
+            field.addEventListener(eventType, e => {
                 e.preventDefault();
+                // Search and the megamenu both re-skin the mobile toggle icon,
+                // so they must never be open at the same time.
+                document.body.classList.remove('megamenu-active');
                 document.body.classList.add('search-active');
+                this.#syncHasText();
             })
             });
-            ele.querySelector('.header__search-field').addEventListener('keyup', e => {
-                const value = ele.querySelector('.header__search-field').value;
-                this.updateSearchContent(value);
+            field.addEventListener('keyup', e => {
+                this.updateSearchContent(field.value);
+            })
+            // 'input' also fires for paste, autofill and the native clear
+            // control, none of which fire keyup — the X would go stale.
+            field.addEventListener('input', () => this.#syncHasText());
+        })
+        // The X clears the query. Dismissing the panel is the overlay's job on
+        // desktop, and the mobile back arrow's (wired in header-alt.liquid).
+        document.querySelectorAll('.header__search-form-close').forEach(ele => {
+            ele.addEventListener('click', e => {
+                e.preventDefault();
+                const field = this.#form.querySelector('.header__search-field');
+                field.value = '';
+                this.#syncHasText();
+                this.updateSearchContent();
+                field.focus();
             })
         })
-        document.querySelectorAll('.header__search-form-close, .header__search-bg-overlay').forEach(ele => {
+        document.querySelectorAll('.header__search-bg-overlay').forEach(ele => {
             ele.addEventListener('click', e => {
                 e.preventDefault();
                 document.body.classList.remove('search-active');
@@ -38,8 +57,20 @@ class SearchPopup extends HTMLElement {
             event.preventDefault();
             // Your event handler logic goes here
             this.#form.querySelector('.header__search-field').value = target.dataset.keyword;
+            this.#syncHasText();
             this.updateSearchContent(target.dataset.keyword);
         });
+        // /search renders the field pre-filled from search.terms, so the X has
+        // to reflect that on load, not just on the first keystroke.
+        this.#syncHasText();
+    }
+    /**
+     * Mirrors "the field has a query in it" onto the body, so CSS can decide
+     * whether the clear icon is worth showing.
+     */
+    #syncHasText(){
+        const field = this.#form && this.#form.querySelector('.header__search-field');
+        document.body.classList.toggle('search-has-text', !!(field && field.value.trim()));
     }
     async updateSearchContent(terms = null){
         this.classList.add('ajax-loading');

@@ -12933,11 +12933,22 @@ input.header__search-field::placeholder {
     align-items: center;
     display: flex;
   }
-  body:not(.megamenu-active) .header-alt__toggle-ic-mobile svg:not(:first-child){
+  /* Explicit icon states. Positional (:first-child) selectors used to live here,
+     but they break the moment a third icon is added to the toggle. */
+  .header-alt__toggle-ic-mobile .header-alt__toggle-ic{
     display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
   }
-  .megamenu-active .header-alt__toggle-ic-mobile svg:first-child{
-    display: none;
+  body:not(.megamenu-active):not(.search-active) .header-alt__toggle-ic-mobile .header-alt__toggle-ic--menu{
+    display: flex;
+  }
+  body.megamenu-active .header-alt__toggle-ic-mobile .header-alt__toggle-ic--close{
+    display: flex;
+  }
+  body.search-active:not(.megamenu-active) .header-alt__toggle-ic-mobile .header-alt__toggle-ic--back{
+    display: flex;
   }
   .white-header:not(.discover-menu-open, .megamenu-active, .search-active) .header-alt__toggle-btn{
       background: rgba(255, 255, 255, 0.10);
