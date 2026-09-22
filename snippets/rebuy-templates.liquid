@@ -590,7 +590,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                                             aria-label="subscription frequency"
                                             v-model="product.subscription_frequency"
                                             v-on:change="updateSubscriptionFrequency(product)">
-                                            <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel(frequency, product.subscription_interval) }}</option>
+                                            <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel.frequency }}</option>
                                         </select>
                                     </div>
 
@@ -874,7 +874,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                                             aria-label="subscription frequency"
                                             v-model="product.subscription_frequency"
                                             v-on:change="updateSubscriptionFrequency(product)">
-                                            <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel(frequency, product.subscription_interval) }}</option>
+                                            <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel.frequency }}</option>
                                         </select>
                                     </div>
 
@@ -948,4 +948,16 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
 
     </div>
 </div>
-</script>
+</script>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ frequencyLabel(frequency, product.subscription_interval) }}"
+  to: "{{ frequencyLabel.frequency }}"
+  position: 30139..30169
+- from: "{{ frequencyLabel(frequency, product.subscription_interval) }}"
+  to: "{{ frequencyLabel.frequency }}"
+  position: 49629..49659
+{%- endcomment -%}

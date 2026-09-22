@@ -27,7 +27,7 @@
                     <p class="cif_promo-desc">{{ block.settings.desc }}</p>
                   {% endif %}
                   </div>
-                  {% render 'btn-global', class: 'cif_promo-btn btn', url: block.settings.url | default: '#', label: block.settings.btn_text, icon: true %}
+                  {% render 'btn-global', class: 'cif_promo-btn btn', url: block.settings.url, default: '#', label: block.settings.btn_text, icon: true %}
               </div>
             </div>
           {% endif %}
@@ -108,4 +108,15 @@
       }
     ]
   }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'btn-global', class: 'cif_promo-btn btn', url: block.settings.url
+    | default: '#', label: block.settings.btn_text, icon: true %}"
+  to: "{% render 'btn-global', class: 'cif_promo-btn btn', url: block.settings.url,
+    default: '#', label: block.settings.btn_text, icon: true %}"
+  position: 1322..1458
+{%- endcomment -%}
